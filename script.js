@@ -15,13 +15,13 @@ function fromDigits(arr) {
 }
 
 function generate() {
-  for (var i= 0, i<15, i++) {
+  for (var i= 0; i<15; i++) {
     const div = document.createElement("div");
     div.className = "task";
     div.innerText = generateTask(1, 1);
     container.appendChild(div);
   };
-  for (var i= 0, i<15, i++) {
+  for (var i= 0; i<15; i++) {
     const div = document.createElement("div");
     div.className = "task";
     div.innerText = generateTask(2, 2);
