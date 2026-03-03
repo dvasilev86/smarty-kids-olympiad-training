@@ -14,8 +14,7 @@ function fromDigits(arr) {
   return parseInt(arr.join(''), 10);
 }
 
-function generate() {
-  const difficulty = document.getElementById("difficulty-select").value;
+function generate() {  
   localStorage.setItem("difficulty", difficulty);
   window.location.href = "worksheet.html";
 }
@@ -63,41 +62,43 @@ function generateValidOperand(currentSum, sign, numDigits, min, max) {
   const sumDigits = toDigits(currentSum, numDigits);
   let newDigits = [];
 
+  // Forbidden addition pairs
+  const forbiddenAdd = new Set([
+    "1+4","2+3","2+4","3+2","3+3","3+4",
+    "4+1","4+2","4+3","4+4"
+  ]);
+
+  // Forbidden subtraction pairs
+  const forbiddenSub = new Set([
+    "5-1","5-2","5-3","5-4",
+    "6-2","6-3","6-4",
+    "7-3","7-4",
+    "8-4"
+  ]);
+
   for (let i = 0; i < numDigits; i++) {
     const sDigit = sumDigits[i];
-
     let allowedDigits = [];
 
-    if (sign === 1) {
-      // ADDITION RULES
+    for (let d = 0; d <= 9; d++) {
 
-      for (let d = 0; d <= 9; d++) {
-        if (sDigit + d > 9) continue; // no carry
+      if (sign === 1) {
+        // no carry
+        if (sDigit + d > 9) continue;
 
-        if (sDigit <= 4) {
-          if (
-            (d >= 0 && d <= 4 - sDigit) ||
-            (d >= 5 - sDigit && d <= 9 - sDigit)
-          ) {
-            allowedDigits.push(d);
-          }
-        } else {
-          if (d === 9 - sDigit) {
-            allowedDigits.push(d);
-          }
-        }
-      }
-    } else {
-      // SUBTRACTION RULES
+        // reject forbidden addition pair
+        if (forbiddenAdd.has(`${sDigit}+${d}`)) continue;
 
-      for (let d = 0; d <= 9; d++) {
-        if (sDigit - d < 0) continue; // no borrow
+        allowedDigits.push(d);
 
-        if (sDigit <= 4) {
-          if (d <= sDigit) allowedDigits.push(d);
-        } else {
-          if (d <= sDigit - 4) allowedDigits.push(d);
-        }
+      } else {
+        // no borrow
+        if (sDigit - d < 0) continue;
+
+        // reject forbidden subtraction pair
+        if (forbiddenSub.has(`${sDigit}-${d}`)) continue;
+
+        allowedDigits.push(d);
       }
     }
 
@@ -119,14 +120,35 @@ function formatExpression(operands) {
 
   for (let i = 1; i < operands.length; i++) {
     if (operands[i] >= 0) {
-      expression += " + " + operands[i];
+      expression += "+" + operands[i];
     } else {
-      expression += " - " + Math.abs(operands[i]);
+      expression += "-" + Math.abs(operands[i]);
     }
   }
 
-  return expression + " = ____";
+  return expression + " = ___";
 }
+function addDifficultyBlock(numOperands, numDigits, numTasks) {
+  const container = document.getElementById("task-container");
+  
+  // create a grid for this difficulty
+  const grid = document.createElement("div");
+  grid.className = "task-grid";
+  
+  for (let i = 0; i < numTasks; i++) {
+    const div = document.createElement("div");
+    div.className = "task";
+    div.innerText = generateTask(numOperands, numDigits);
+    grid.appendChild(div);
+  }
+
+  container.appendChild(grid);
+
+  const separator = document.createElement("div");
+  separator.className = "separator";
+  container.appendChild(separator);
+}
+
 window.onload = function() {
   const container = document.getElementById("task-container");
   if (!container) return;
@@ -135,17 +157,6 @@ window.onload = function() {
   const title = document.getElementById("worksheet-title");
 
   title.innerText = "Difficulty: " + difficulty.toUpperCase();
-  for (var i= 0; i<15; i++) {
-    const div = document.createElement("div");
-    div.className = "task";
-    div.innerText = generateTask(3, 1);
-    container.appendChild(div);
-  };
-  for (var i= 0; i<15; i++) {
-    const div = document.createElement("div");
-    div.className = "task";
-    div.innerText = generateTask(3, 2);
-    container.appendChild(div);
-  };
-  
+  addDifficultyBlock(3, 1, 15)
+  addDifficultyBlock(3, 2, 15)
 };
