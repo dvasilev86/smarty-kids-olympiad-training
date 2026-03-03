@@ -16,6 +16,11 @@ button {
 }
 
 /* Worksheet layout */
+hr {
+  border: none;
+  border-top: 2px solid black;
+  margin: 20px 0;
+}
 
 .worksheet {
   width: 100%;
@@ -23,17 +28,34 @@ button {
 
 .task-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-  margin-top: 30px;
-  font-size: 22px;
+  grid-template-columns: repeat(15, auto);
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 12px;
 }
 
 .task {
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
   border-bottom: 1px solid #000;
-  padding-bottom: 10px;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  white-space: nowrap;
 }
 
+.separator {
+  grid-column: 1 / -1;
+  border-top: 2px solid black;
+  margin: 5px 0;
+}
+
+.difficulty-block {
+  display: flex;
+  justify-content: space-between;
+}
 /* Print settings */
 
 @page {
