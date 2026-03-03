@@ -15,18 +15,7 @@ function fromDigits(arr) {
 }
 
 function generate() {
-  for (var i= 0; i<15; i++) {
-    const div = document.createElement("div");
-    div.className = "task";
-    div.innerText = generateTask(1, 1);
-    container.appendChild(div);
-  };
-  for (var i= 0; i<15; i++) {
-    const div = document.createElement("div");
-    div.className = "task";
-    div.innerText = generateTask(2, 2);
-    container.appendChild(div);
-  };
+  const difficulty = document.getElementById("difficulty-select").value;
   localStorage.setItem("difficulty", difficulty);
   window.location.href = "worksheet.html";
 }
@@ -86,7 +75,10 @@ function generateValidOperand(currentSum, sign, numDigits, min, max) {
         if (sDigit + d > 9) continue; // no carry
 
         if (sDigit <= 4) {
-          if (d <= (4 - sDigit) || d >= (5 - sDigit)) {
+          if (
+            (d >= 0 && d <= 4 - sDigit) ||
+            (d >= 5 - sDigit && d <= 9 - sDigit)
+          ) {
             allowedDigits.push(d);
           }
         } else {
@@ -143,6 +135,17 @@ window.onload = function() {
   const title = document.getElementById("worksheet-title");
 
   title.innerText = "Difficulty: " + difficulty.toUpperCase();
-
+  for (var i= 0; i<15; i++) {
+    const div = document.createElement("div");
+    div.className = "task";
+    div.innerText = generateTask(3, 1);
+    container.appendChild(div);
+  };
+  for (var i= 0; i<15; i++) {
+    const div = document.createElement("div");
+    div.className = "task";
+    div.innerText = generateTask(3, 2);
+    container.appendChild(div);
+  };
   
 };
