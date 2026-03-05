@@ -60,6 +60,7 @@ hr {
   font-size: 12px;
   font-weight: bold;
 }
+
 .separator {
   grid-column: 1 / -1;
   border-top: 2px solid black;
